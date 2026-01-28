@@ -8,24 +8,21 @@ from django.db import connection
 from django.core.management import call_command
 from api.models import Test
 
-def db_info():
-    s = connection.settings_dict
-    return {
-        "ENGINE": s.get("ENGINE"),
-        "NAME": s.get("NAME"),
-        "HOST": s.get("HOST"),
-        "PORT": s.get("PORT"),
-        "USER": s.get("USER"),
-        "VENDOR": connection.vendor,
-    }
+print("STEP: load_fixtures.py started")
+print("DB VENDOR:", connection.vendor)
+print("DB NAME:", connection.settings_dict.get("NAME"))
 
-print("DB INFO:", db_info())
-print("Test count BEFORE:", Test.objects.count())
+before = Test.objects.count()
+print("Test count BEFORE:", before)
 
-if Test.objects.exists():
+if before > 0:
     print("Fixtures skipped: data already exists.")
 else:
     print("Loading fixtures.json ...")
     call_command("loaddata", "fixtures.json", verbosity=2)
 
-print("Test count AFTER:", Test.objects.count())
+after = Test.objects.count()
+print("Test count AFTER:", after)
+
+if after == 0:
+    raise SystemExit("ERROR: Fixtures loaded but Test count is still 0 (fixtures.json may be wrong)")
