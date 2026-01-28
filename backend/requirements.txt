@@ -1,4 +1,4 @@
-Django
+Django>=5.0
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
@@ -6,5 +6,5 @@ django-cors-headers
 gunicorn
 whitenoise
 dj-database-url
-python-dotenv
 psycopg[binary]
+python-dotenv
